@@ -18,6 +18,11 @@ CHECKPOINT_MODELS=(
     "https://civitai.com/api/download/models/2555652?type=Model&format=SafeTensor&size=full&fp=fp8|DasiwaWAN22I2V14BLightspeed_synthseductionLowV9.safetensors"
 )
 
+WAN_MODELS=(
+    "https://civitai.com/api/download/models/2555640?type=Model&format=SafeTensor&size=full&fp=fp8|DasiwaWAN22I2V14BLightspeed_synthseductionHighV9.safetensors"
+    "https://civitai.com/api/download/models/2555652?type=Model&format=SafeTensor&size=full&fp=fp8|DasiwaWAN22I2V14BLightspeed_synthseductionLowV9.safetensors"
+)
+
 # 변수 추가
 CLIP_MODELS=(
     "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors|umt5_xxl_fp8_e4m3fn_scaled.safetensors"
@@ -87,6 +92,9 @@ function provisioning_start() {
     provisioning_get_models \
         "${WORKSPACE}/ComfyUI/models/clip_vision" \
         "${CLIP_VISION_MODELS[@]}"
+    provisioning_get_models \
+        "${WORKSPACE}/ComfyUI/models/unet" \
+        "${WAN_MODELS[@]}"
     
     provisioning_print_end
 }
