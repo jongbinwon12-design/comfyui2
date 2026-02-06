@@ -4,12 +4,12 @@
 
 # 설치할 커스텀 노드 목록
 NODES=(
-    "https://github.com/calcuis/gguf"
-    "https://github.com/yolain/ComfyUI-Easy-Use"
-    "https://github.com/kijai/ComfyUI-KJNodes"
-    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
-    "https://github.com/melMass/comfy_mtb"
-    "https://github.com/filliptm/ComfyUI_Fill-Nodes"
+#    "https://github.com/calcuis/gguf"
+#    "https://github.com/yolain/ComfyUI-Easy-Use"
+#    "https://github.com/kijai/ComfyUI-KJNodes"
+#    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+#    "https://github.com/melMass/comfy_mtb"
+#    "https://github.com/filliptm/ComfyUI_Fill-Nodes"
 )
 
 # 체크포인트 모델
