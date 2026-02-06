@@ -4,60 +4,49 @@
 
 # 설치할 커스텀 노드 목록
 NODES=(
-    "https://github.com/ltdrdata/ComfyUI-Manager"
-    "https://github.com/cubiq/ComfyUI_essentials"
-    "https://github.com/willmiao/ComfyUI-Lora-Manager"
-    "https://github.com/jags111/efficiency-nodes-comfyui"
-    "https://github.com/NyaamZ/efficiency-nodes-ED"
-    "https://github.com/rgthree/rgthree-comfy"
-    "https://github.com/ltdrdata/ComfyUI-Impact-Pack"
-    "https://github.com/ltdrdata/ComfyUI-Impact-Subpack"
-    "https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
-    "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
-    "https://github.com/newtextdoc1111/ComfyUI-Autocomplete-Plus"
+    "https://github.com/calcuis/gguf"
+    "https://github.com/yolain/ComfyUI-Easy-Use"
+    "https://github.com/kijai/ComfyUI-KJNodes"
+    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+    "https://github.com/melMass/comfy_mtb"
+    "https://github.com/filliptm/ComfyUI_Fill-Nodes"
 )
 
 # 체크포인트 모델
 CHECKPOINT_MODELS=(
-    "https://civitai.com/api/download/models/2514310?type=Model&format=SafeTensor&size=pruned&fp=fp16|waiIllustrious_v160.safetensors"
     "https://civitai.com/api/download/models/2555640?type=Model&format=SafeTensor&size=full&fp=fp8|DasiwaWAN22I2V14BLightspeed_synthseductionHighV9.safetensors"
     "https://civitai.com/api/download/models/2555652?type=Model&format=SafeTensor&size=full&fp=fp8|DasiwaWAN22I2V14BLightspeed_synthseductionLowV9.safetensors"
+)
+
+# 변수 추가
+CLIP_MODELS=(
+    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors|umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+)
+
+CLIP_VISION_MODELS=(
+    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors|clip_vision_h.safetensors"
 )
 
 UNET_MODELS=()
 
 # LoRA 모델 (이 부분이 다시 작동하는지 확인하세요)
 LORA_MODELS=(
-    "https://civitai.com/api/download/models/1266729?type=Model&format=SafeTensor|makima_chainsaw_man.safetensors"
-    "https://civitai.com/api/download/models/2625886?type=Model&format=SafeTensor|instant_loss_2col.safetensors"
-    "https://civitai.com/api/download/models/2235346?type=Model&format=SafeTensor|Japanese_art_styles.safetensors"
-    "https://civitai.com/api/download/models/2498503?type=Model&format=SafeTensor|MoriiMee.safetensors"
 )
 
 CONTROLNET_MODELS=(
-    "https://civitai.com/api/download/models/158658?type=Model&format=SafeTensor|OpenPoseXL2.safetensors"
 )
 
 # VAE 모델
 VAE_MODELS=(
-    "https://civitai.com/api/download/models/333245?type=Model&format=SafeTensor|sdxl_vae_fp16.safetensors"
+    "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors|wan_2.1_vae.safetensors"
 )
 
 UPSCALE_MODELS=(
-    "https://civitai.com/api/download/models/164904?type=Model&format=PickleTensor|realesrganX4plusAnime_v1.pt"
 )
 
 LATENT_UPSCALE_MODELS=(
-    "https://civitai.com/api/download/models/164904?type=Model&format=PickleTensor|realesrganX4plusAnime_v1.pt"
 )
 
-PIP_PACKAGES=(
-    "piexif"
-    "opencv-python-headless"
-    "simpleeval"
-    "scikit-image"
-    "ultralytics"
-)
 
 ### 운영 로직 (수정하지 마세요) ###
 
@@ -79,7 +68,6 @@ function provisioning_start() {
     
     provisioning_get_apt_packages
     provisioning_get_nodes
-    provisioning_get_pip_packages
     
     # 모델 다운로드 실행
     provisioning_get_models \
@@ -91,15 +79,14 @@ function provisioning_start() {
     provisioning_get_models \
         "${WORKSPACE}/ComfyUI/models/vae" \
         "${VAE_MODELS[@]}"
+    # 실행 로직 (provisioning_start 함수 내)
     provisioning_get_models \
-        "${WORKSPACE}/ComfyUI/models/upscale_models" \
-        "${UPSCALE_MODELS[@]}"
+        "${WORKSPACE}/ComfyUI/models/clip" \
+        "${CLIP_MODELS[@]}"
+    # CLIP Vision
     provisioning_get_models \
-        "${WORKSPACE}/ComfyUI/models/latent_upscale_models" \
-        "${LATENT_UPSCALE_MODELS[@]}"
-    provisioning_get_models \
-    "${WORKSPACE}/ComfyUI/models/controlnet" \
-    "${CONTROLNET_MODELS[@]}"
+        "${WORKSPACE}/ComfyUI/models/clip_vision" \
+        "${CLIP_VISION_MODELS[@]}"
     
     provisioning_print_end
 }
@@ -118,11 +105,6 @@ function provisioning_get_apt_packages() {
     fi
 }
 
-function provisioning_get_pip_packages() {
-    if [[ -n $PIP_PACKAGES ]]; then
-        pip_install ${PIP_PACKAGES[@]}
-    fi
-}
 
 function provisioning_get_nodes() {
     for repo in "${NODES[@]}"; do
